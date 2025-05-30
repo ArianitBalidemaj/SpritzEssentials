@@ -1,3 +1,13 @@
+// Initialize EmailJS with configuration
+(function() {
+    // Check if config exists, otherwise use fallback
+    if (typeof window.emailConfig !== 'undefined') {
+        emailjs.init(window.emailConfig.publicKey);
+    } else {
+        console.error('EmailJS configuration not found. Please create config.js with your EmailJS credentials.');
+    }
+})();
+
 // Simple navigation - jump to sections with offset
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
@@ -94,13 +104,19 @@ window.addEventListener('resize', function() {
     }
 });
 
-// Form submission handling
+// Form submission handling with EmailJS
 const form = document.getElementById('partnership-form');
 const successMessage = document.getElementById('success-message');
 const errorMessage = document.getElementById('error-message');
 
 form.addEventListener('submit', function(e) {
     e.preventDefault();
+    
+    // Check if EmailJS configuration is available
+    if (typeof window.emailConfig === 'undefined') {
+        showError('Email configuration not found. Please contact us directly at partnerships@spritzessentials.com');
+        return;
+    }
     
     // Get form data
     const formData = new FormData(form);
@@ -128,13 +144,39 @@ form.addEventListener('submit', function(e) {
     submitBtn.textContent = 'Sending...';
     submitBtn.classList.add('loading');
     
-    // Simulate form submission (replace with actual API call)
-    setTimeout(() => {
-        submitBtn.textContent = originalText;
-        submitBtn.classList.remove('loading');
-        showSuccess();
-        form.reset();
-    }, 2000);
+    // Prepare email template parameters
+    const templateParams = {
+        from_name: data.name,
+        from_email: data.email,
+        phone: data.phone || 'Not provided',
+        venue_name: data['venue-name'],
+        venue_type: data['venue-type'],
+        location: data.location,
+        message: data.message || 'No additional message provided',
+        reply_to: data.email,
+        submission_date: new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        })
+    };
+    
+    // Send email using EmailJS
+    emailjs.send(window.emailConfig.serviceId, window.emailConfig.templateId, templateParams)
+        .then(function(response) {
+            console.log('Email sent successfully!', response.status, response.text);
+            submitBtn.textContent = originalText;
+            submitBtn.classList.remove('loading');
+            showSuccess();
+            form.reset();
+        }, function(error) {
+            console.error('Email sending failed:', error);
+            submitBtn.textContent = originalText;
+            submitBtn.classList.remove('loading');
+            showError('Failed to send message. Please try again or contact us directly at partnerships@spritzessentials.com');
+        });
 });
 
 function showSuccess() {
@@ -255,12 +297,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Add focus management for accessibility
     const form = document.getElementById('partnership-form');
-    form.addEventListener('submit', function() {
-        setTimeout(() => {
-            const firstError = form.querySelector('.error-message:not([style*="display: none"])');
-            if (firstError) {
-                firstError.focus();
-            }
-        }, 100);
-    });
+    if (form) {
+        form.addEventListener('submit', function() {
+            setTimeout(() => {
+                const firstError = form.querySelector('.error-message:not([style*="display: none"])');
+                if (firstError) {
+                    firstError.focus();
+                }
+            }, 100);
+        });
+    }
 });
