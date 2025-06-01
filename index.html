@@ -3,234 +3,308 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spritz Essentials - Premium Fragrance Access for Upscale Venues</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Spritz Essentials - Luxury Fragrance Vending Solutions</title>
+    
+    <!-- External Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <!-- EmailJS Script -->
+    
+    <!-- EmailJS -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
+    <!-- Local Stylesheets -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <nav class="container">
-            <a href="#" class="logo">
-                <i class="fas fa-spray-can"></i>
-                Spritz Essentials
-            </a>
-            <ul class="nav-links">
-                <li><a href="#how-it-works">How It Works</a></li>
-                <li><a href="#for-venues">For Venues</a></li>
-                <li><a href="#brands">Brands</a></li>
-                <li><a href="#contact">Partnership</a></li>
-            </ul>
-            <div class="mobile-menu">
-                <i class="fas fa-bars"></i>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-gem"></i>
+                <span>Spritz Essentials</span>
             </div>
-        </nav>
-    </header>
+            
+            <ul class="nav-menu">
+                <li><a href="#heritage">Heritage</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#benefits">Benefits</a></li>
+                <li><a href="#collections">Collections</a></li>
+                <li><a href="#partnership">Partnership</a></li>
+            </ul>
+            
+            <div class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
 
     <!-- Hero Section -->
     <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">Est. 2025</div>
+            <h1 class="hero-title">The Art of Fragrance Access</h1>
+            <p class="hero-subtitle">Curated luxury fragrance vending solutions for distinguished venues. Where sophistication meets accessibility.</p>
+            <a href="#partnership" class="cta-primary">Discover Partnership</a>
+        </div>
+        <div class="hero-scroll">
+            <span>Scroll to explore</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- Heritage Section -->
+    <section id="heritage" class="heritage">
         <div class="container">
-            <div class="hero-content fade-in-up">
-                <h1>Premium Fragrances, Instant Access</h1>
-                <p class="subtitle">Elevate your venue with luxury fragrance vending machines. Offer your guests premium scents for just $1 per spray.</p>
-                <a href="#contact" class="cta-button">Partner With Us</a>
+            <div class="heritage-grid">
+                <div class="heritage-content">
+                    <div class="section-label">Our Legacy</div>
+                    <h2>Crafted Excellence</h2>
+                    <p>Born from a passion for democratizing luxury, Spritz Essentials represents the convergence of artisanal fragrance curation and innovative access solutions.</p>
+                    <p>Each machine is meticulously designed to preserve the integrity of premium fragrances while delivering an unparalleled guest experience.</p>
+                    <div class="heritage-stats">
+                        <div class="stat">
+                            <span class="stat-number">250+</span>
+                            <span class="stat-label">Partner Venues</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">50+</span>
+                            <span class="stat-label">Premium Fragrances</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="heritage-visual">
+                    <div class="machine-display"></div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- How It Works Section -->
-    <section id="how-it-works" class="how-it-works">
+    <!-- Experience Section -->
+    <section id="experience" class="experience">
         <div class="container">
-            <div class="section-header fade-in-up">
-                <h2>Simple, Elegant, Profitable</h2>
-                <p>Our premium fragrance vending machines deliver luxury experiences with effortless simplicity</p>
+            <div class="section-header">
+                <div class="section-label">The Process</div>
+                <h2>Effortless Sophistication</h2>
+                <p>Our precision-engineered solutions deliver luxury fragrance experiences with meticulous attention to detail.</p>
             </div>
-            <div class="steps">
-                <div class="step fade-in-up">
+            
+            <div class="experience-steps">
+                <div class="step">
                     <div class="step-icon">
-                        <i class="fas fa-hand-pointer"></i>
+                        <span class="step-number">01</span>
+                    </div>
+                    <h3>Discover</h3>
+                    <p>Guests explore our curated collection through an elegant touchscreen interface showcasing premium fragrance profiles.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-icon">
+                        <span class="step-number">02</span>
                     </div>
                     <h3>Select</h3>
-                    <p>Guests browse our curated collection of premium fragrances on the intuitive touchscreen interface.</p>
+                    <p>Seamless selection process with detailed fragrance information, ensuring the perfect choice for every moment.</p>
                 </div>
-                <div class="step fade-in-up">
+                
+                <div class="step">
                     <div class="step-icon">
-                        <i class="fas fa-credit-card"></i>
+                        <span class="step-number">03</span>
                     </div>
-                    <h3>Pay</h3>
-                    <p>Quick and secure payment with cash, card, or mobile payment for just $1 per spray.</p>
-                </div>
-                <div class="step fade-in-up">
-                    <div class="step-icon">
-                        <i class="fas fa-spray-can"></i>
-                    </div>
-                    <h3>Spray</h3>
-                    <p>Premium fragrance dispensed instantly in the perfect amount for an elegant finishing touch.</p>
+                    <h3>Experience</h3>
+                    <p>Precisely measured premium fragrance dispensed with artisanal attention, creating an unforgettable moment.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- For Venues Section -->
-    <section id="for-venues" class="for-venues">
+    <!-- Benefits Section -->
+    <section id="benefits" class="benefits">
         <div class="container">
-            <div class="venues-content">
-                <div class="venues-text fade-in-up">
-                    <h2>Transform Your Venue Experience</h2>
-                    <div class="benefits">
-                        <div class="benefit">
-                            <div class="benefit-icon">
-                                <i class="fas fa-dollar-sign"></i>
-                            </div>
-                            <div class="benefit-text">
-                                <h4>Additional Revenue Stream</h4>
-                                <p>Generate passive income with high-margin sales while enhancing guest satisfaction.</p>
-                            </div>
-                        </div>
-                        <div class="benefit">
-                            <div class="benefit-icon">
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <div class="benefit-text">
-                                <h4>Premium Amenity</h4>
-                                <p>Position your venue as upscale and thoughtful with luxury fragrance access.</p>
-                            </div>
-                        </div>
-                        <div class="benefit">
-                            <div class="benefit-icon">
-                                <i class="fas fa-users"></i>
-                            </div>
-                            <div class="benefit-text">
-                                <h4>Enhanced Guest Experience</h4>
-                                <p>Provide a memorable touchpoint that keeps guests coming back.</p>
-                            </div>
-                        </div>
-                        <div class="benefit">
-                            <div class="benefit-icon">
-                                <i class="fas fa-cog"></i>
-                            </div>
-                            <div class="benefit-text">
-                                <h4>Hassle-Free Operation</h4>
-                                <p>Zero maintenance required. We handle everything from installation to restocking.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+            <div class="section-header light">
+                <div class="section-label">Partnership Benefits</div>
+                <h2>Elevate Your Establishment</h2>
+                <p>Transform your venue into a destination of distinction while generating exceptional returns.</p>
             </div>
-        </div>
-    </section>
-
-    <!-- Featured Brands Section -->
-    <section id="brands" class="featured-brands">
-        <div class="container">
-            <div class="fade-in-up">
-                <h2>Established Luxury Brands</h2>
-                <p>We partner with renowned fragrance houses to offer only the finest scents</p>
-                <div class="brands-grid">
-                    <div class="brand-item">
-                        <i class="fas fa-gem"></i>
-                        <h4>Designer Collections</h4>
-                        <p>Premium designer fragrances from established luxury brands</p>
-                    </div>
-                    <div class="brand-item">
-                        <i class="fas fa-award"></i>
-                        <h4>Award-Winning Scents</h4>
-                        <p>Internationally recognized and celebrated fragrance compositions</p>
-                    </div>
-                    <div class="brand-item">
-                        <i class="fas fa-leaf"></i>
-                        <h4>Artisan Creations</h4>
-                        <p>Unique and sophisticated scents from boutique perfume houses</p>
-                    </div>
-                    <div class="brand-item">
+            
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">
                         <i class="fas fa-crown"></i>
-                        <h4>Exclusive Selections</h4>
-                        <p>Carefully curated collection of premium and niche fragrances</p>
                     </div>
+                    <h3>Premium Revenue</h3>
+                    <p>Generate substantial passive income through high-margin luxury sales while enhancing your venue's atmosphere.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>Distinguished Amenity</h3>
+                    <p>Position your establishment as a curator of luxury experiences, attracting discerning clientele.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Guest Experience</h3>
+                    <p>Create memorable touchpoints that transform visits into extraordinary experiences.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <h3>White-Glove Service</h3>
+                    <p>Comprehensive support including installation, maintenance, and ongoing partnership management.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
+    <!-- Collections Section -->
+    <section id="collections" class="collections">
         <div class="container">
-            <div class="contact-content">
-                <div class="contact-info fade-in-up">
-                    <h2>Partner With Spritz Essentials</h2>
-                    <p>Ready to elevate your venue with premium fragrance vending? Let's discuss how Spritz Essentials can enhance your guest experience while generating additional revenue.</p>
+            <div class="section-header">
+                <div class="section-label">Curated Portfolio</div>
+                <h2>Artisanal Fragrance Collections</h2>
+                <p>Each fragrance is selected for exceptional quality, distinctive character, and lasting impressions.</p>
+            </div>
+            
+            <div class="collections-grid">
+                <div class="collection-item">
+                    <div class="collection-icon">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <h3>Maison Selections</h3>
+                    <p>Prestigious fragrances from renowned houses, representing centuries of perfumery expertise.</p>
+                </div>
+                
+                <div class="collection-item">
+                    <div class="collection-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <h3>Celebrated Compositions</h3>
+                    <p>Internationally acclaimed fragrances that have defined trends and captured imaginations.</p>
+                </div>
+                
+                <div class="collection-item">
+                    <div class="collection-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3>Artisan Creations</h3>
+                    <p>Distinctive scents from boutique perfumers offering unique contemporary sophistication.</p>
+                </div>
+                
+                <div class="collection-item">
+                    <div class="collection-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3>Global Exclusives</h3>
+                    <p>Carefully sourced international fragrances bringing worldly elegance to your clientele.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partnership Section -->
+    <section id="partnership" class="partnership">
+        <div class="container">
+            <div class="partnership-grid">
+                <div class="partnership-info">
+                    <div class="section-label">Begin Your Journey</div>
+                    <h2>Partnership Inquiry</h2>
+                    <p>Discover how Spritz Essentials can transform your venue into a destination of distinction. Our specialists craft bespoke solutions reflecting your establishment's unique character.</p>
+                    
                     <div class="contact-details">
                         <div class="contact-item">
-                            <i class="fas fa-phone"></i>
-                            <div>
-                                <strong>Phone:</strong><br>
-                                1-800-SPRITZ-1
+                            <div class="contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="contact-info">
+                                <span class="contact-label">Consultations</span>
+                                <span class="contact-value">+1 (800) SPRITZ-1</span>
                             </div>
                         </div>
+                        
                         <div class="contact-item">
-                            <i class="fas fa-envelope"></i>
-                            <div>
-                                <strong>Email:</strong><br>
-                                partnerships@spritzessentials.com
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-info">
+                                <span class="contact-label">Partnerships</span>
+                                <span class="contact-value">partnerships@spritzessentials.com</span>
                             </div>
                         </div>
+                        
                         <div class="contact-item">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <div>
-                                <strong>Headquarters:</strong><br>
-                                New York, NY
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-info">
+                                <span class="contact-label">Headquarters</span>
+                                <span class="contact-value">New York, NY</span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="contact-form fade-in-up">
-                    <form id="partnership-form">
+                
+                <div class="partnership-form">
+                    <form id="partnershipForm" class="form">
                         <div class="form-group">
                             <label for="name">Full Name *</label>
                             <input type="text" id="name" name="name" required>
                         </div>
+                        
                         <div class="form-group">
                             <label for="email">Email Address *</label>
                             <input type="email" id="email" name="email" required>
                         </div>
+                        
                         <div class="form-group">
                             <label for="phone">Phone Number</label>
                             <input type="tel" id="phone" name="phone">
                         </div>
+                        
                         <div class="form-group">
-                            <label for="venue-name">Venue Name *</label>
-                            <input type="text" id="venue-name" name="venue-name" required>
+                            <label for="venue">Establishment Name *</label>
+                            <input type="text" id="venue" name="venue" required>
                         </div>
+                        
                         <div class="form-group">
-                            <label for="venue-type">Venue Type *</label>
-                            <select id="venue-type" name="venue-type" required>
-                                <option value="">Select venue type</option>
-                                <option value="nightclub">Nightclub</option>
-                                <option value="bar">Bar/Lounge</option>
-                                <option value="restaurant">Restaurant</option>
-                                <option value="hotel">Hotel</option>
-                                <option value="event-space">Event Space</option>
+                            <label for="venueType">Establishment Type *</label>
+                            <select id="venueType" name="venueType" required>
+                                <option value="">Select establishment type</option>
+                                <option value="luxury-hotel">Luxury Hotel</option>
+                                <option value="fine-dining">Fine Dining Restaurant</option>
+                                <option value="members-club">Private Members Club</option>
+                                <option value="upscale-lounge">Upscale Lounge</option>
+                                <option value="boutique-hotel">Boutique Hotel</option>
+                                <option value="event-venue">Premium Event Venue</option>
+                                <option value="spa-wellness">Spa & Wellness</option>
                                 <option value="other">Other</option>
                             </select>
                         </div>
+                        
                         <div class="form-group">
-                            <label for="location">Venue Location *</label>
+                            <label for="location">Location *</label>
                             <input type="text" id="location" name="location" placeholder="City, State" required>
                         </div>
+                        
                         <div class="form-group">
-                            <label for="message">Tell us about your venue and partnership interest</label>
-                            <textarea id="message" name="message" placeholder="Number of guests per night, target demographic, etc."></textarea>
+                            <label for="message">Tell us about your vision</label>
+                            <textarea id="message" name="message" placeholder="Guest demographics, venue atmosphere, partnership goals..."></textarea>
                         </div>
-                        <button type="submit" class="submit-btn">Request Partnership Information</button>
-                        <div class="success-message" id="success-message">
-                            Thank you for your interest! We'll contact you within 24 hours to discuss partnership opportunities.
+                        
+                        <button type="submit" class="btn-submit">Request Partnership Consultation</button>
+                        
+                        <div id="formSuccess" class="form-message success" style="display: none;">
+                            Thank you for your inquiry. Our partnership specialist will contact you within 24 hours.
                         </div>
-                        <div class="error-message" id="error-message">
-                            Please fill out all required fields correctly.
+                        
+                        <div id="formError" class="form-message error" style="display: none;">
+                            Please ensure all required fields are completed correctly.
                         </div>
                     </form>
                 </div>
@@ -239,30 +313,36 @@
     </section>
 
     <!-- Footer -->
-    <footer>
+    <footer class="footer">
         <div class="container">
-            <div class="footer-content">
+            <div class="footer-grid">
                 <div class="footer-section">
-                    <h3>Spritz Essentials</h3>
-                    <p>Transforming venues with premium fragrance vending solutions. Elevating guest experiences while creating new revenue opportunities.</p>
+                    <div class="footer-brand">
+                        <i class="fas fa-gem"></i>
+                        <span>Spritz Essentials</span>
+                    </div>
+                    <p>Elevating distinguished venues through curated luxury fragrance access solutions.</p>
                 </div>
+                
                 <div class="footer-section">
                     <h3>Services</h3>
                     <ul>
-                        <li><a href="#">Venue Partnerships</a></li>
-                        <li><a href="#">Machine Installation</a></li>
-                        <li><a href="#">Maintenance & Support</a></li>
-                        <li><a href="#">Revenue Sharing</a></li>
+                        <li><a href="#">Bespoke Installation</a></li>
+                        <li><a href="#">Concierge Maintenance</a></li>
+                        <li><a href="#">Fragrance Curation</a></li>
+                        <li><a href="#">Revenue Optimization</a></li>
                     </ul>
                 </div>
+                
                 <div class="footer-section">
                     <h3>Contact</h3>
                     <ul>
-                        <li>1-800-SPRITZ-1</li>
+                        <li>+1 (800) SPRITZ-1</li>
                         <li>partnerships@spritzessentials.com</li>
                         <li>New York, NY</li>
                     </ul>
                 </div>
+                
                 <div class="footer-section">
                     <h3>Legal</h3>
                     <ul>
@@ -272,14 +352,14 @@
                     </ul>
                 </div>
             </div>
+            
             <div class="footer-bottom">
-                <p>&copy; 2025 Spritz Essentials. All rights reserved. Premium fragrance vending solutions.</p>
+                <p>&copy; 2025 Spritz Essentials. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Load configuration and scripts -->
-    <script src="config.js"></script>
+    <!-- JavaScript -->
     <script src="script.js"></script>
 </body>
 </html>
