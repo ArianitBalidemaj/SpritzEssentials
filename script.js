@@ -45,20 +45,26 @@ function initializeNavigation() {
         });
     });
     
-    // Smooth scrolling for navigation links
+    // Smooth scrolling for navigation links - UPDATED TO HANDLE EXTERNAL LINKS
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href');
-            const targetElement = document.querySelector(targetId);
+            const href = this.getAttribute('href');
             
-            if (targetElement) {
-                const offsetTop = targetElement.offsetTop - 80; // Account for fixed navbar
-                window.scrollTo({
-                    top: offsetTop,
-                    behavior: 'smooth'
-                });
+            // Only prevent default and smooth scroll for internal hash links
+            if (href && href.startsWith('#')) {
+                e.preventDefault();
+                const targetElement = document.querySelector(href);
+                
+                if (targetElement) {
+                    const offsetTop = targetElement.offsetTop - 80; // Account for fixed navbar
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
             }
+            // For external links (like partnerships.html), let them work normally
+            // Don't prevent default for external links
         });
     });
     
@@ -228,158 +234,6 @@ function animateCounter(element, start, end, duration) {
 
 function easeOutQuart(t) {
     return 1 - Math.pow(1 - t, 4);
-}
-
-// ===== FRAGRANCE SLIDESHOW FUNCTIONALITY =====
-function initializeSlideshow() {
-    const container = document.getElementById('collectionsContainer');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const indicators = document.querySelectorAll('.indicator');
-    
-    if (!container || !prevBtn || !nextBtn) return;
-    
-    let currentSlide = 0;
-    const totalCards = 8; // Total number of cards
-    const visibleCards = 4; // Cards visible at once
-    const maxSlides = totalCards - visibleCards; // Maximum slides (0-4)
-    
-    // Calculate the width of one card plus gap
-    function getCardWidth() {
-        const slideWrapper = document.querySelector('.slideshow-wrapper');
-        const containerWidth = slideWrapper.offsetWidth;
-        const gap = 32; // 2rem gap in pixels
-        return (containerWidth + gap) / visibleCards;
-    }
-    
-    // Update slide position
-    function updateSlidePosition() {
-        const cardWidth = getCardWidth();
-        const translateX = -(currentSlide * cardWidth);
-        container.style.transform = `translateX(${translateX}px)`;
-        
-        // Update indicators
-        indicators.forEach((indicator, index) => {
-            indicator.classList.toggle('active', index === currentSlide);
-        });
-        
-        // Update button states
-        prevBtn.disabled = currentSlide === 0;
-        nextBtn.disabled = currentSlide >= maxSlides;
-    }
-    
-    // Next slide (move one card)
-    function nextSlide() {
-        if (currentSlide < maxSlides) {
-            currentSlide++;
-            updateSlidePosition();
-        }
-    }
-    
-    // Previous slide (move one card)
-    function prevSlide() {
-        if (currentSlide > 0) {
-            currentSlide--;
-            updateSlidePosition();
-        }
-    }
-    
-    // Go to specific slide
-    function goToSlide(slideIndex) {
-        if (slideIndex >= 0 && slideIndex <= maxSlides) {
-            currentSlide = slideIndex;
-            updateSlidePosition();
-        }
-    }
-    
-    // Event listeners
-    nextBtn.addEventListener('click', nextSlide);
-    prevBtn.addEventListener('click', prevSlide);
-    
-    // Indicator click events
-    indicators.forEach((indicator, index) => {
-        indicator.addEventListener('click', () => goToSlide(index));
-    });
-    
-    // Keyboard navigation
-    document.addEventListener('keydown', function(e) {
-        // Only handle slideshow navigation when slideshow is in view
-        const slideshowElement = document.querySelector('.collections-slideshow');
-        const rect = slideshowElement.getBoundingClientRect();
-        const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-        
-        if (isVisible) {
-            if (e.key === 'ArrowLeft') {
-                prevSlide();
-            } else if (e.key === 'ArrowRight') {
-                nextSlide();
-            }
-        }
-    });
-    
-    // Touch/swipe support for mobile
-    let startX = 0;
-    let endX = 0;
-    
-    container.addEventListener('touchstart', function(e) {
-        startX = e.touches[0].clientX;
-    });
-    
-    container.addEventListener('touchend', function(e) {
-        endX = e.changedTouches[0].clientX;
-        handleSwipe();
-    });
-    
-    function handleSwipe() {
-        const threshold = 50; // Minimum swipe distance
-        const diff = startX - endX;
-        
-        if (Math.abs(diff) > threshold) {
-            if (diff > 0) {
-                // Swiped left - go to next slide
-                nextSlide();
-            } else {
-                // Swiped right - go to previous slide
-                prevSlide();
-            }
-        }
-    }
-    
-    // Recalculate on window resize
-    window.addEventListener('resize', function() {
-        updateSlidePosition();
-    });
-    
-    // Auto-play functionality (optional)
-    let autoplayInterval;
-    const autoplayDelay = 8000; // 8 seconds
-    
-    function startAutoplay() {
-        autoplayInterval = setInterval(() => {
-            if (currentSlide >= maxSlides) {
-                goToSlide(0); // Loop back to first slide
-            } else {
-                nextSlide();
-            }
-        }, autoplayDelay);
-    }
-    
-    function stopAutoplay() {
-        clearInterval(autoplayInterval);
-    }
-    
-    // Pause autoplay on hover
-    const slideshowElement = document.querySelector('.collections-slideshow');
-    if (slideshowElement) {
-        slideshowElement.addEventListener('mouseenter', stopAutoplay);
-        slideshowElement.addEventListener('mouseleave', startAutoplay);
-    }
-    
-    // Initialize
-    updateSlidePosition();
-    // startAutoplay(); // Uncomment if you want auto-play
-    
-    console.log('Fragrance slideshow initialized');
 }
 
 // ===== FORM HANDLING =====
@@ -617,7 +471,7 @@ document.addEventListener('keydown', function(e) {
         const navLeft = document.querySelector('.nav-left');
         const navRight = document.querySelector('.nav-right');
         
-        if (navLeft.classList.contains('active')) {
+        if (navLeft && navLeft.classList.contains('active')) {
             navToggle.classList.remove('active');
             navLeft.classList.remove('active');
             navRight.classList.remove('active');
@@ -637,9 +491,9 @@ function manageFocus() {
     const navRight = document.querySelector('.nav-right');
     const navLinks = document.querySelectorAll('.nav-left a, .nav-right a');
     
-    if (navLeft.classList.contains('active')) {
+    if (navLeft && navLeft.classList.contains('active')) {
         // Focus first link when menu opens
-        navLinks[0].focus();
+        if (navLinks[0]) navLinks[0].focus();
         
         // Trap focus within menu
         navLinks.forEach((link, index) => {
@@ -654,101 +508,6 @@ function manageFocus() {
                     }
                 }
             });
-        });
-    }
-}
-
-// ===== PRELOADER (Optional) =====
-function initializePreloader() {
-    // Create preloader if doesn't exist
-    if (!document.querySelector('.preloader')) {
-        const preloader = document.createElement('div');
-        preloader.className = 'preloader';
-        preloader.innerHTML = `
-            <div class="preloader-content">
-                <i class="fas fa-gem preloader-icon"></i>
-                <div class="preloader-text">Spritz Essentials</div>
-                <div class="preloader-bar">
-                    <div class="preloader-progress"></div>
-                </div>
-            </div>
-        `;
-        
-        // Add preloader styles
-        const style = document.createElement('style');
-        style.textContent = `
-            .preloader {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: var(--color-black);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 9999;
-                transition: opacity 0.5s ease;
-            }
-            
-            .preloader-content {
-                text-align: center;
-                color: var(--color-white);
-            }
-            
-            .preloader-icon {
-                font-size: 3rem;
-                color: var(--color-gold);
-                margin-bottom: 1rem;
-                animation: pulse 2s infinite;
-            }
-            
-            .preloader-text {
-                font-family: var(--font-display);
-                font-size: 1.5rem;
-                font-weight: 600;
-                margin-bottom: 2rem;
-                letter-spacing: 2px;
-            }
-            
-            .preloader-bar {
-                width: 200px;
-                height: 2px;
-                background: rgba(201, 169, 110, 0.3);
-                border-radius: 1px;
-                overflow: hidden;
-            }
-            
-            .preloader-progress {
-                height: 100%;
-                background: var(--color-gold);
-                width: 0;
-                border-radius: 1px;
-                animation: loading 2s ease-in-out;
-            }
-            
-            @keyframes pulse {
-                0%, 100% { transform: scale(1); }
-                50% { transform: scale(1.1); }
-            }
-            
-            @keyframes loading {
-                0% { width: 0; }
-                100% { width: 100%; }
-            }
-        `;
-        
-        document.head.appendChild(style);
-        document.body.appendChild(preloader);
-        
-        // Remove preloader after page load
-        window.addEventListener('load', function() {
-            setTimeout(() => {
-                preloader.style.opacity = '0';
-                setTimeout(() => {
-                    preloader.remove();
-                }, 500);
-            }, 1000);
         });
     }
 }
@@ -866,6 +625,3 @@ const templateParams = {
     submission_date: new Date().toLocaleDateString()
 };
 */
-
-// ===== EXPORT FOR TESTING (if using modules) =====
-// export { initializeApp, validateForm, animateCounter };
