@@ -22,21 +22,24 @@ function initializeApp() {
 function initializeNavigation() {
     const navbar = document.querySelector('.navbar');
     const navToggle = document.querySelector('.nav-toggle');
-    const navMenu = document.querySelector('.nav-menu');
-    const navLinks = document.querySelectorAll('.nav-menu a');
+    const navLeft = document.querySelector('.nav-left');
+    const navRight = document.querySelector('.nav-right');
+    const navLinks = document.querySelectorAll('.nav-left a, .nav-right a');
     
     // Mobile menu toggle
     navToggle.addEventListener('click', function() {
         navToggle.classList.toggle('active');
-        navMenu.classList.toggle('active');
-        document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
+        navLeft.classList.toggle('active');
+        navRight.classList.toggle('active');
+        document.body.style.overflow = navLeft.classList.contains('active') ? 'hidden' : '';
     });
     
     // Close mobile menu when clicking on links
     navLinks.forEach(link => {
         link.addEventListener('click', function() {
             navToggle.classList.remove('active');
-            navMenu.classList.remove('active');
+            navLeft.classList.remove('active');
+            navRight.classList.remove('active');
             document.body.style.overflow = '';
         });
     });
@@ -458,11 +461,13 @@ document.addEventListener('keydown', function(e) {
     // ESC key closes mobile menu
     if (e.key === 'Escape') {
         const navToggle = document.querySelector('.nav-toggle');
-        const navMenu = document.querySelector('.nav-menu');
+        const navLeft = document.querySelector('.nav-left');
+        const navRight = document.querySelector('.nav-right');
         
-        if (navMenu.classList.contains('active')) {
+        if (navLeft.classList.contains('active')) {
             navToggle.classList.remove('active');
-            navMenu.classList.remove('active');
+            navLeft.classList.remove('active');
+            navRight.classList.remove('active');
             document.body.style.overflow = '';
         }
     }
@@ -475,10 +480,11 @@ document.addEventListener('keydown', function(e) {
 
 // Focus management for mobile menu
 function manageFocus() {
-    const navMenu = document.querySelector('.nav-menu');
-    const navLinks = navMenu.querySelectorAll('a');
+    const navLeft = document.querySelector('.nav-left');
+    const navRight = document.querySelector('.nav-right');
+    const navLinks = document.querySelectorAll('.nav-left a, .nav-right a');
     
-    if (navMenu.classList.contains('active')) {
+    if (navLeft.classList.contains('active')) {
         // Focus first link when menu opens
         navLinks[0].focus();
         
