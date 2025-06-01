@@ -14,6 +14,7 @@ function initializeApp() {
     initializeScrollEffects();
     initializeAnimations();
     initializeForm();
+    // Removed slideshow initialization since we're back to original design
     
     console.log('Spritz Essentials - Luxury Fragrance Solutions Initialized');
 }
@@ -126,7 +127,7 @@ function initializeAnimations() {
         });
     }, observerOptions);
     
-    // Observe elements for animation
+    // Observe elements for animation (back to original selectors)
     const animatedElements = document.querySelectorAll(
         '.heritage-content, .heritage-visual, .step, .benefit-card, .collection-item, .partnership-info, .partnership-form'
     );
@@ -145,7 +146,7 @@ function initializeAnimations() {
 }
 
 function initializeHoverEffects() {
-    // Enhanced hover effects for cards
+    // Enhanced hover effects for cards (back to original selectors)
     const cards = document.querySelectorAll('.step, .benefit-card, .collection-item');
     
     cards.forEach(card => {
@@ -227,6 +228,158 @@ function animateCounter(element, start, end, duration) {
 
 function easeOutQuart(t) {
     return 1 - Math.pow(1 - t, 4);
+}
+
+// ===== FRAGRANCE SLIDESHOW FUNCTIONALITY =====
+function initializeSlideshow() {
+    const container = document.getElementById('collectionsContainer');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const indicators = document.querySelectorAll('.indicator');
+    
+    if (!container || !prevBtn || !nextBtn) return;
+    
+    let currentSlide = 0;
+    const totalCards = 8; // Total number of cards
+    const visibleCards = 4; // Cards visible at once
+    const maxSlides = totalCards - visibleCards; // Maximum slides (0-4)
+    
+    // Calculate the width of one card plus gap
+    function getCardWidth() {
+        const slideWrapper = document.querySelector('.slideshow-wrapper');
+        const containerWidth = slideWrapper.offsetWidth;
+        const gap = 32; // 2rem gap in pixels
+        return (containerWidth + gap) / visibleCards;
+    }
+    
+    // Update slide position
+    function updateSlidePosition() {
+        const cardWidth = getCardWidth();
+        const translateX = -(currentSlide * cardWidth);
+        container.style.transform = `translateX(${translateX}px)`;
+        
+        // Update indicators
+        indicators.forEach((indicator, index) => {
+            indicator.classList.toggle('active', index === currentSlide);
+        });
+        
+        // Update button states
+        prevBtn.disabled = currentSlide === 0;
+        nextBtn.disabled = currentSlide >= maxSlides;
+    }
+    
+    // Next slide (move one card)
+    function nextSlide() {
+        if (currentSlide < maxSlides) {
+            currentSlide++;
+            updateSlidePosition();
+        }
+    }
+    
+    // Previous slide (move one card)
+    function prevSlide() {
+        if (currentSlide > 0) {
+            currentSlide--;
+            updateSlidePosition();
+        }
+    }
+    
+    // Go to specific slide
+    function goToSlide(slideIndex) {
+        if (slideIndex >= 0 && slideIndex <= maxSlides) {
+            currentSlide = slideIndex;
+            updateSlidePosition();
+        }
+    }
+    
+    // Event listeners
+    nextBtn.addEventListener('click', nextSlide);
+    prevBtn.addEventListener('click', prevSlide);
+    
+    // Indicator click events
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => goToSlide(index));
+    });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        // Only handle slideshow navigation when slideshow is in view
+        const slideshowElement = document.querySelector('.collections-slideshow');
+        const rect = slideshowElement.getBoundingClientRect();
+        const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+        
+        if (isVisible) {
+            if (e.key === 'ArrowLeft') {
+                prevSlide();
+            } else if (e.key === 'ArrowRight') {
+                nextSlide();
+            }
+        }
+    });
+    
+    // Touch/swipe support for mobile
+    let startX = 0;
+    let endX = 0;
+    
+    container.addEventListener('touchstart', function(e) {
+        startX = e.touches[0].clientX;
+    });
+    
+    container.addEventListener('touchend', function(e) {
+        endX = e.changedTouches[0].clientX;
+        handleSwipe();
+    });
+    
+    function handleSwipe() {
+        const threshold = 50; // Minimum swipe distance
+        const diff = startX - endX;
+        
+        if (Math.abs(diff) > threshold) {
+            if (diff > 0) {
+                // Swiped left - go to next slide
+                nextSlide();
+            } else {
+                // Swiped right - go to previous slide
+                prevSlide();
+            }
+        }
+    }
+    
+    // Recalculate on window resize
+    window.addEventListener('resize', function() {
+        updateSlidePosition();
+    });
+    
+    // Auto-play functionality (optional)
+    let autoplayInterval;
+    const autoplayDelay = 8000; // 8 seconds
+    
+    function startAutoplay() {
+        autoplayInterval = setInterval(() => {
+            if (currentSlide >= maxSlides) {
+                goToSlide(0); // Loop back to first slide
+            } else {
+                nextSlide();
+            }
+        }, autoplayDelay);
+    }
+    
+    function stopAutoplay() {
+        clearInterval(autoplayInterval);
+    }
+    
+    // Pause autoplay on hover
+    const slideshowElement = document.querySelector('.collections-slideshow');
+    if (slideshowElement) {
+        slideshowElement.addEventListener('mouseenter', stopAutoplay);
+        slideshowElement.addEventListener('mouseleave', startAutoplay);
+    }
+    
+    // Initialize
+    updateSlidePosition();
+    // startAutoplay(); // Uncomment if you want auto-play
+    
+    console.log('Fragrance slideshow initialized');
 }
 
 // ===== FORM HANDLING =====
