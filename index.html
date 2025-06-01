@@ -28,7 +28,7 @@
             </div>
             
             <ul class="nav-right">
-                <li><a href="./partnerships.html">Partnership</a></li>
+                <li><a href="partnerships.html">Partnership</a></li>
             </ul>
             
             <div class="nav-toggle">
@@ -45,7 +45,7 @@
             <div class="hero-badge">Est. 2025</div>
             <h1 class="hero-title">The Art of Fragrance Access</h1>
             <p class="hero-subtitle">Curated luxury fragrance vending solutions for distinguished venues. Where sophistication meets accessibility.</p>
-            <a href="#partnership" class="cta-primary">Discover Partnership</a>
+            <a href="#inquiries" class="cta-primary">Get in Touch</a>
         </div>
         <div class="hero-scroll">
             <span>Scroll to explore</span>
@@ -206,14 +206,14 @@
         </div>
     </section>
 
-    <!-- Partnership Section -->
-    <section id="partnership" class="partnership">
+    <!-- General Inquiries Section -->
+    <section id="inquiries" class="partnership">
         <div class="container">
             <div class="partnership-grid">
                 <div class="partnership-info">
-                    <div class="section-label">Begin Your Journey</div>
-                    <h2>Partnership Inquiry</h2>
-                    <p>Discover how Spritz Essentials can transform your venue into a destination of distinction. Our specialists craft bespoke solutions reflecting your establishment's unique character.</p>
+                    <div class="section-label">Get in Touch</div>
+                    <h2>General Inquiries</h2>
+                    <p>Have questions about our luxury fragrance solutions? Whether you're curious about our collections, interested in learning more about our services, or simply want to connect with our team, we're here to help.</p>
                     
                     <div class="contact-details">
                         <div class="contact-item">
@@ -221,7 +221,7 @@
                                 <i class="fas fa-phone"></i>
                             </div>
                             <div class="contact-info">
-                                <span class="contact-label">Consultations</span>
+                                <span class="contact-label">General Information</span>
                                 <span class="contact-value">+1 (800) SPRITZ-1</span>
                             </div>
                         </div>
@@ -231,14 +231,24 @@
                                 <i class="fas fa-envelope"></i>
                             </div>
                             <div class="contact-info">
-                                <span class="contact-label">Partnerships</span>
+                                <span class="contact-label">Email Inquiries</span>
+                                <span class="contact-value">hello@spritzessentials.com</span>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-handshake"></i>
+                            </div>
+                            <div class="contact-info">
+                                <span class="contact-label">Partnership Opportunities</span>
                                 <span class="contact-value">partnerships@spritzessentials.com</span>
                             </div>
                         </div>
                         
                         <div class="contact-item">
                             <div class="contact-icon">
-                                <i class="fas fa-map-marker-alt"></i>
+                                <i class="fas fa-building"></i>
                             </div>
                             <div class="contact-info">
                                 <span class="contact-label">Headquarters</span>
@@ -249,7 +259,7 @@
                 </div>
                 
                 <div class="partnership-form">
-                    <form id="partnershipForm" class="form">
+                    <form id="generalInquiryForm" class="form">
                         <div class="form-group">
                             <label for="name">Full Name *</label>
                             <input type="text" id="name" name="name" required>
@@ -266,39 +276,50 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="venue">Establishment Name *</label>
-                            <input type="text" id="venue" name="venue" required>
+                            <label for="subject">Subject *</label>
+                            <input type="text" id="subject" name="subject" required placeholder="What can we help you with?">
                         </div>
                         
                         <div class="form-group">
-                            <label for="venueType">Establishment Type *</label>
-                            <select id="venueType" name="venueType" required>
-                                <option value="">Select establishment type</option>
-                                <option value="luxury-hotel">Luxury Hotel</option>
-                                <option value="fine-dining">Fine Dining Restaurant</option>
-                                <option value="members-club">Private Members Club</option>
-                                <option value="upscale-lounge">Upscale Lounge</option>
-                                <option value="boutique-hotel">Boutique Hotel</option>
-                                <option value="event-venue">Premium Event Venue</option>
-                                <option value="spa-wellness">Spa & Wellness</option>
+                            <label for="inquiryType">Type of Inquiry *</label>
+                            <select id="inquiryType" name="inquiryType" required>
+                                <option value="">Select inquiry type</option>
+                                <option value="general-info">General Information</option>
+                                <option value="product-info">Product Information</option>
+                                <option value="partnership">Partnership Opportunities</option>
+                                <option value="locations">Locations & Availability</option>
+                                <option value="technical-support">Technical Support</option>
+                                <option value="media-press">Media & Press</option>
+                                <option value="careers">Career Opportunities</option>
+                                <option value="feedback">Feedback & Suggestions</option>
                                 <option value="other">Other</option>
                             </select>
                         </div>
                         
                         <div class="form-group">
-                            <label for="location">Location *</label>
-                            <input type="text" id="location" name="location" placeholder="City, State" required>
+                            <label for="organization">Organization/Company</label>
+                            <input type="text" id="organization" name="organization" placeholder="Optional">
                         </div>
                         
                         <div class="form-group">
-                            <label for="message">Tell us about your vision</label>
-                            <textarea id="message" name="message" placeholder="Guest demographics, venue atmosphere, partnership goals..."></textarea>
+                            <label for="message">Message *</label>
+                            <textarea id="message" name="message" required placeholder="Please provide details about your inquiry..."></textarea>
                         </div>
                         
-                        <button type="submit" class="btn-submit">Request Partnership Consultation</button>
+                        <div class="form-group">
+                            <label for="preferredContact">Preferred Contact Method</label>
+                            <select id="preferredContact" name="preferredContact">
+                                <option value="">No preference</option>
+                                <option value="email">Email</option>
+                                <option value="phone">Phone</option>
+                                <option value="either">Either email or phone</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn-submit">Send Inquiry</button>
                         
                         <div id="formSuccess" class="form-message success" style="display: none;">
-                            Thank you for your inquiry. Our partnership specialist will contact you within 24 hours.
+                            Thank you for your inquiry. We'll get back to you within 24-48 hours.
                         </div>
                         
                         <div id="formError" class="form-message error" style="display: none;">
@@ -336,7 +357,7 @@
                     <h3>Contact</h3>
                     <ul>
                         <li>+1 (800) SPRITZ-1</li>
-                        <li>partnerships@spritzessentials.com</li>
+                        <li>hello@spritzessentials.com</li>
                         <li>New York, NY</li>
                     </ul>
                 </div>
@@ -344,9 +365,9 @@
                 <div class="footer-section">
                     <h3>Legal</h3>
                     <ul>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                        <li><a href="#">Partnership Agreement</a></li>
+                        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                        <li><a href="terms-of-service.html">Terms of Service</a></li>
+                        <li><a href="partnership-agreement.html">Partnership Agreement</a></li>
                     </ul>
                 </div>
             </div>

@@ -14,7 +14,6 @@ function initializeApp() {
     initializeScrollEffects();
     initializeAnimations();
     initializeForm();
-    // Removed slideshow initialization since we're back to original design
     
     console.log('Spritz Essentials - Luxury Fragrance Solutions Initialized');
 }
@@ -133,7 +132,7 @@ function initializeAnimations() {
         });
     }, observerOptions);
     
-    // Observe elements for animation (back to original selectors)
+    // Observe elements for animation
     const animatedElements = document.querySelectorAll(
         '.heritage-content, .heritage-visual, .step, .benefit-card, .collection-item, .partnership-info, .partnership-form'
     );
@@ -152,7 +151,7 @@ function initializeAnimations() {
 }
 
 function initializeHoverEffects() {
-    // Enhanced hover effects for cards (back to original selectors)
+    // Enhanced hover effects for cards
     const cards = document.querySelectorAll('.step, .benefit-card, .collection-item');
     
     cards.forEach(card => {
@@ -236,9 +235,9 @@ function easeOutQuart(t) {
     return 1 - Math.pow(1 - t, 4);
 }
 
-// ===== FORM HANDLING =====
+// ===== FORM HANDLING - UPDATED FOR GENERAL INQUIRIES =====
 function initializeForm() {
-    const form = document.getElementById('partnershipForm');
+    const form = document.getElementById('generalInquiryForm'); // Updated form ID
     const submitButton = document.querySelector('.btn-submit');
     const successMessage = document.getElementById('formSuccess');
     const errorMessage = document.getElementById('formError');
@@ -246,7 +245,7 @@ function initializeForm() {
     if (!form) return;
     
     // Form validation
-    const inputs = form.querySelectorAll('input[required], select[required]');
+    const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
     inputs.forEach(input => {
         input.addEventListener('blur', validateField);
         input.addEventListener('input', clearFieldError);
@@ -301,7 +300,7 @@ function initializeForm() {
     
     function validateForm() {
         let isValid = true;
-        const requiredFields = form.querySelectorAll('input[required], select[required]');
+        const requiredFields = form.querySelectorAll('input[required], select[required], textarea[required]');
         
         requiredFields.forEach(field => {
             if (!validateField({ target: field })) {
@@ -315,47 +314,56 @@ function initializeForm() {
     function submitForm() {
         // Show loading state
         const originalText = submitButton.textContent;
-        submitButton.textContent = 'Submitting...';
+        submitButton.textContent = 'Sending...';
         submitButton.disabled = true;
         
         // Collect form data
         const formData = new FormData(form);
         const data = Object.fromEntries(formData);
         
-        // Simulate form submission (replace with actual EmailJS implementation)
-        setTimeout(() => {
-            // Reset button
-            submitButton.textContent = originalText;
-            submitButton.disabled = false;
-            
-            // Show success message and reset form
-            showMessage('Thank you for your inquiry. Our partnership specialist will contact you within 24 hours.', 'success');
-            form.reset();
-            
-            // In a real implementation, you would use EmailJS here:
-            /*
-            emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
+        // EmailJS Implementation for General Inquiries
+        if (typeof emailjs !== 'undefined') {
+            // Prepare template parameters for EmailJS
+            const templateParams = {
                 from_name: data.name,
                 from_email: data.email,
                 phone: data.phone || 'Not provided',
-                venue_name: data.venue,
-                venue_type: data.venueType,
-                location: data.location,
-                message: data.message || 'No additional message',
-                reply_to: data.email
-            }).then(function(response) {
-                submitButton.textContent = originalText;
-                submitButton.disabled = false;
-                showMessage('Thank you for your inquiry. Our partnership specialist will contact you within 24 hours.', 'success');
-                form.reset();
-            }, function(error) {
-                submitButton.textContent = originalText;
-                submitButton.disabled = false;
-                showMessage('There was an error submitting your inquiry. Please try again or contact us directly.', 'error');
-            });
-            */
+                subject: data.subject,
+                inquiry_type: data.inquiryType,
+                organization: data.organization || 'Not provided',
+                message: data.message,
+                preferred_contact: data.preferredContact || 'No preference',
+                reply_to: data.email,
+                submission_date: new Date().toLocaleDateString(),
+                submission_time: new Date().toLocaleTimeString()
+            };
             
-        }, 1500); // Simulate network delay
+            // Send email using EmailJS
+            emailjs.send('YOUR_SERVICE_ID', 'YOUR_GENERAL_INQUIRY_TEMPLATE_ID', templateParams)
+                .then(function(response) {
+                    console.log('Email sent successfully:', response);
+                    submitButton.textContent = originalText;
+                    submitButton.disabled = false;
+                    showMessage('Thank you for your inquiry. We\'ll get back to you within 24-48 hours.', 'success');
+                    form.reset();
+                }, function(error) {
+                    console.error('Email send failed:', error);
+                    submitButton.textContent = originalText;
+                    submitButton.disabled = false;
+                    showMessage('There was an error sending your inquiry. Please try again or contact us directly at hello@spritzessentials.com', 'error');
+                });
+        } else {
+            // Simulate form submission without EmailJS
+            setTimeout(() => {
+                submitButton.textContent = originalText;
+                submitButton.disabled = false;
+                showMessage('Thank you for your inquiry. We\'ll get back to you within 24-48 hours.', 'success');
+                form.reset();
+                
+                // Log the form data for testing
+                console.log('General Inquiry Form Data:', data);
+            }, 1500);
+        }
     }
     
     function showMessage(message, type) {
@@ -538,14 +546,14 @@ function checkBrowserCompatibility() {
 // ===== ANALYTICS & TRACKING (Optional) =====
 function initializeAnalytics() {
     // Track form submissions
-    const form = document.getElementById('partnershipForm');
+    const form = document.getElementById('generalInquiryForm');
     if (form) {
         form.addEventListener('submit', function() {
             // Example: Google Analytics event tracking
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'form_submission', {
-                    event_category: 'Partnership',
-                    event_label: 'Partnership Inquiry Form'
+                    event_category: 'General_Inquiry',
+                    event_label: 'General Inquiry Form'
                 });
             }
         });
@@ -573,7 +581,6 @@ function initializeAnalytics() {
 // Initialize additional features after DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
     checkBrowserCompatibility();
-    // initializePreloader(); // Uncomment if you want the preloader
     initializeAnalytics();
     
     // Add CSS animation for ripple effect
@@ -596,32 +603,68 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('🎉 Spritz Essentials website fully loaded and ready!');
 });
 
-// ===== EMAILJS CONFIGURATION =====
+// ===== EMAILJS CONFIGURATION FOR GENERAL INQUIRIES =====
 // To use EmailJS, uncomment and configure the following:
 /*
 function initializeEmailJS() {
     emailjs.init('YOUR_PUBLIC_KEY'); // Replace with your EmailJS public key
     
     // Test EmailJS connection
-    emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
+    emailjs.send('YOUR_SERVICE_ID', 'YOUR_GENERAL_INQUIRY_TEMPLATE_ID', {
         test: 'test'
     }).then(function() {
-        console.log('EmailJS configured successfully');
+        console.log('EmailJS configured successfully for general inquiries');
     }).catch(function(error) {
         console.error('EmailJS configuration error:', error);
     });
 }
 
-// Email template parameters structure for reference:
-const templateParams = {
+// Email template parameters structure for general inquiries:
+const generalInquiryTemplateParams = {
     from_name: 'John Doe',
     from_email: 'john@example.com',
     phone: '+1234567890',
-    venue_name: 'The Grand Hotel',
-    venue_type: 'luxury-hotel',
-    location: 'New York, NY',
-    message: 'Interested in partnership opportunities...',
+    subject: 'Question about fragrance collections',
+    inquiry_type: 'product-info',
+    organization: 'ABC Company',
+    message: 'I have questions about your luxury fragrance solutions...',
+    preferred_contact: 'email',
     reply_to: 'john@example.com',
-    submission_date: new Date().toLocaleDateString()
+    submission_date: new Date().toLocaleDateString(),
+    submission_time: new Date().toLocaleTimeString()
 };
+*/
+
+// ===== EMAILJS TEMPLATE VARIABLES FOR GENERAL INQUIRIES =====
+/*
+Template variables available for your EmailJS general inquiry template:
+
+{{from_name}} - Full name of the person
+{{from_email}} - Email address
+{{phone}} - Phone number
+{{subject}} - Subject line
+{{inquiry_type}} - Type of inquiry selected
+{{organization}} - Organization/company name
+{{message}} - Main message content
+{{preferred_contact}} - Preferred contact method
+{{reply_to}} - Reply-to email
+{{submission_date}} - Date of submission
+{{submission_time}} - Time of submission
+
+Example EmailJS template:
+---
+Subject: New General Inquiry - {{subject}}
+
+Name: {{from_name}}
+Email: {{from_email}}
+Phone: {{phone}}
+Organization: {{organization}}
+Inquiry Type: {{inquiry_type}}
+Preferred Contact: {{preferred_contact}}
+
+Message:
+{{message}}
+
+Submitted: {{submission_date}} at {{submission_time}}
+---
 */
