@@ -554,55 +554,223 @@ p {
     background: var(--color-cream);
 }
 
-.collections-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--spacing-md);
+/* ===== FRAGRANCE SHOWCASE STYLES ===== */
+.fragrance-showcase {
+    position: relative;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
-.collection-item {
+.fragrance-carousel {
+    overflow: hidden;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.fragrance-grid {
+    display: flex;
+    gap: 2rem;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+
+.fragrance-card {
+    flex: 0 0 calc(25% - 1.5rem);
     background: var(--color-white);
-    padding: var(--spacing-lg);
-    border-radius: 8px;
-    text-align: center;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-medium);
+    border: 1px solid rgba(201, 169, 110, 0.2);
     transition: var(--transition-smooth);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: var(--shadow-light);
+    position: relative;
+    overflow: hidden;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
 }
 
-.collection-item:hover {
-    transform: translateY(-10px);
-    box-shadow: var(--shadow-medium);
+.fragrance-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--color-gold), #b8965a);
+    transform: scaleX(0);
+    transition: var(--transition-smooth);
+}
+
+.fragrance-card:hover::before {
+    transform: scaleX(1);
+}
+
+.fragrance-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-heavy);
     border-color: var(--color-gold);
 }
 
-.collection-icon {
-    width: 60px;
-    height: 60px;
-    background: var(--color-gold);
+.fragrance-type {
+    display: inline-block;
+    background: var(--color-accent);
+    color: var(--color-gold);
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(201, 169, 110, 0.3);
+}
+
+.fragrance-name {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-black);
+    margin-bottom: 0.4rem;
+    line-height: 1.3;
+}
+
+.fragrance-brand {
+    font-size: 0.8rem;
+    color: var(--color-gold);
+    font-weight: 500;
+    margin-bottom: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.fragrance-description {
+    color: var(--color-text-light);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    flex-grow: 1;
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.fragrance-notes {
+    margin-top: auto;
+}
+
+.notes-label {
+    font-size: 0.8rem;
+    color: var(--color-text);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+}
+
+.notes-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.note-tag {
+    background: var(--color-gray-light);
+    color: var(--color-text);
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+/* ===== CAROUSEL CONTROLS ===== */
+.carousel-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.carousel-btn {
+    width: 50px;
+    height: 50px;
+    border: 2px solid var(--color-gold);
+    background: transparent;
+    color: var(--color-gold);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto var(--spacing-md);
-    font-size: 1.5rem;
-    color: var(--color-black);
+    cursor: pointer;
     transition: var(--transition-smooth);
+    font-size: 1.2rem;
+    position: relative;
+    overflow: hidden;
 }
 
-.collection-item:hover .collection-icon {
+.carousel-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--color-gold);
+    border-radius: 50%;
+    transform: scale(0);
+    transition: var(--transition-smooth);
+    z-index: -1;
+}
+
+.carousel-btn:hover::before {
+    transform: scale(1);
+}
+
+.carousel-btn:hover {
+    color: var(--color-black);
     transform: scale(1.1);
 }
 
-.collection-item h3 {
-    margin-bottom: 1rem;
-    color: var(--color-black);
-    font-size: 1.1rem;
+.carousel-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
 }
 
-.collection-item p {
-    font-size: 0.9rem;
-    line-height: 1.6;
+.carousel-btn:disabled:hover::before {
+    transform: scale(0);
+}
+
+.carousel-btn:disabled:hover {
+    color: var(--color-gold);
+}
+
+.carousel-dots {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(201, 169, 110, 0.3);
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    position: relative;
+}
+
+.dot.active {
+    background: var(--color-gold);
+    transform: scale(1.2);
+}
+
+.dot:hover {
+    background: var(--color-gold);
+    transform: scale(1.1);
 }
 
 /* ===== PARTNERSHIP SECTION ===== */
@@ -905,7 +1073,13 @@ p {
     transform: translateY(0);
 }
 
-/* ===== RESPONSIVE DESIGN ===== */
+/* ===== RESPONSIVE DESIGN FOR FRAGRANCE CAROUSEL ===== */
+@media (max-width: 1200px) {
+    .fragrance-card {
+        flex: 0 0 calc(33.333% - 1.33rem);
+    }
+}
+
 @media (max-width: 1024px) {
     .container {
         padding: 0 1.5rem;
@@ -920,10 +1094,6 @@ p {
     .experience-steps {
         grid-template-columns: repeat(2, 1fr);
         gap: var(--spacing-md);
-    }
-    
-    .collections-grid {
-        grid-template-columns: repeat(2, 1fr);
     }
     
     .benefits-grid {
@@ -1005,17 +1175,36 @@ p {
         font-size: 1.1rem;
     }
     
-    .experience-steps,
-    .fragrance-card {
+    .experience-steps {
         grid-template-columns: 1fr;
     }
     
-    .collections-container {
-        width: 100%;
+    .fragrance-carousel {
+        padding: 1.5rem;
     }
     
     .fragrance-card {
-        flex: 0 0 calc(50% - var(--spacing-md) * 0.5);
+        flex: 0 0 calc(50% - 1rem);
+        min-height: 260px;
+        padding: 1.2rem;
+    }
+    
+    .fragrance-grid {
+        gap: 1rem;
+    }
+    
+    .fragrance-name {
+        font-size: 1.1rem;
+    }
+    
+    .carousel-controls {
+        gap: 1rem;
+    }
+    
+    .carousel-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
     }
     
     .heritage-stats {
@@ -1075,12 +1264,16 @@ p {
     }
     
     .fragrance-card {
-        flex: 0 0 100%;
-        min-height: 320px;
+        flex: 0 0 calc(100% - 0.5rem);
+        min-height: 240px;
     }
     
-    .collections-container {
-        gap: 1rem;
+    .fragrance-carousel {
+        padding: 1rem;
+    }
+    
+    .carousel-controls {
+        gap: 0.5rem;
     }
 }
 
