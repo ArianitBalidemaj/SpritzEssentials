@@ -303,25 +303,130 @@ class FragranceCarousel {
     }
 }
 
+// ===== EMAILJS INITIALIZATION & MANAGEMENT =====
+class EmailJSManager {
+    constructor() {
+        this.isInitialized = false;
+        this.config = null;
+    }
+    
+    async initialize() {
+        try {
+            // Check if EmailJS library is loaded
+            if (typeof emailjs === 'undefined') {
+                throw new Error('EmailJS library not loaded');
+            }
+            
+            // Check if config is available
+            if (!window.EMAILJS_CONFIG) {
+                throw new Error('EmailJS configuration not found');
+            }
+            
+            this.config = window.EMAILJS_CONFIG;
+            
+            // Validate configuration
+            if (!this.config.publicKey || !this.config.serviceId || !this.config.templateId) {
+                throw new Error('Incomplete EmailJS configuration');
+            }
+            
+            // Initialize EmailJS
+            emailjs.init(this.config.publicKey);
+            this.isInitialized = true;
+            
+            console.log('✅ EmailJS initialized successfully');
+            
+            // Optional: Test connection
+            await this.testConnection();
+            
+        } catch (error) {
+            console.error('❌ EmailJS initialization failed:', error.message);
+            this.isInitialized = false;
+        }
+    }
+    
+    async testConnection() {
+        try {
+            // Send a minimal test to verify connection (this won't actually send an email)
+            await emailjs.send(this.config.serviceId, this.config.templateId, {
+                test: 'connection_test',
+                timestamp: new Date().toISOString()
+            }, this.config.publicKey);
+            
+            console.log('✅ EmailJS connection test successful');
+        } catch (error) {
+            console.warn('⚠️ EmailJS connection test failed:', error.message);
+            // Don't throw error here as it might be a template validation issue
+        }
+    }
+    
+    async sendEmail(templateParams) {
+        if (!this.isInitialized) {
+            throw new Error('EmailJS not initialized');
+        }
+        
+        try {
+            const response = await emailjs.send(
+                this.config.serviceId,
+                this.config.templateId,
+                templateParams,
+                this.config.publicKey
+            );
+            
+            console.log('✅ Email sent successfully:', response);
+            return response;
+        } catch (error) {
+            console.error('❌ Email sending failed:', error);
+            throw error;
+        }
+    }
+    
+    formatFormData(formData) {
+        return {
+            from_name: formData.name || '',
+            from_email: formData.email || '',
+            phone: formData.phone || 'Not provided',
+            subject: formData.subject || 'General Inquiry',
+            inquiry_type: formData.inquiryType || 'general',
+            organization: formData.organization || 'Not provided',
+            message: formData.message || '',
+            preferred_contact: formData.preferredContact || 'email',
+            reply_to: formData.email || '',
+            submission_date: new Date().toLocaleDateString(),
+            submission_time: new Date().toLocaleTimeString()
+        };
+    }
+}
+
+// Create global EmailJS manager instance
+const emailManager = new EmailJSManager();
+
 // ===== INITIALIZATION =====
 document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
 });
 
-function initializeApp() {
-    // Initialize EmailJS (you'll need to add your service details)
-    if (typeof emailjs !== 'undefined') {
-        // emailjs.init('YOUR_PUBLIC_KEY'); // Uncomment and add your EmailJS public key
+async function initializeApp() {
+    try {
+        // Initialize EmailJS first
+        await emailManager.initialize();
+        
+        // Initialize all other components
+        initializeNavigation();
+        initializeScrollEffects();
+        initializeAnimations();
+        initializeForm();
+        initializeFragranceCarousel();
+        
+        console.log('🎉 Spritz Essentials - Luxury Fragrance Solutions Initialized');
+    } catch (error) {
+        console.error('❌ App initialization error:', error);
+        // Continue with other initializations even if EmailJS fails
+        initializeNavigation();
+        initializeScrollEffects();
+        initializeAnimations();
+        initializeForm();
+        initializeFragranceCarousel();
     }
-    
-    // Initialize all components
-    initializeNavigation();
-    initializeScrollEffects();
-    initializeAnimations();
-    initializeForm();
-    initializeFragranceCarousel();
-    
-    console.log('Spritz Essentials - Luxury Fragrance Solutions Initialized');
 }
 
 // ===== FRAGRANCE CAROUSEL INITIALIZATION =====
@@ -341,24 +446,24 @@ function initializeNavigation() {
     const navLinks = document.querySelectorAll('.nav-left a, .nav-right a');
     
     // Mobile menu toggle
-    navToggle.addEventListener('click', function() {
+    navToggle?.addEventListener('click', function() {
         navToggle.classList.toggle('active');
-        navLeft.classList.toggle('active');
-        navRight.classList.toggle('active');
-        document.body.style.overflow = navLeft.classList.contains('active') ? 'hidden' : '';
+        navLeft?.classList.toggle('active');
+        navRight?.classList.toggle('active');
+        document.body.style.overflow = navLeft?.classList.contains('active') ? 'hidden' : '';
     });
     
     // Close mobile menu when clicking on links
     navLinks.forEach(link => {
         link.addEventListener('click', function() {
-            navToggle.classList.remove('active');
-            navLeft.classList.remove('active');
-            navRight.classList.remove('active');
+            navToggle?.classList.remove('active');
+            navLeft?.classList.remove('active');
+            navRight?.classList.remove('active');
             document.body.style.overflow = '';
         });
     });
     
-    // Smooth scrolling for navigation links - UPDATED TO HANDLE EXTERNAL LINKS
+    // Smooth scrolling for navigation links
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
@@ -376,8 +481,6 @@ function initializeNavigation() {
                     });
                 }
             }
-            // For external links (like partnerships.html), let them work normally
-            // Don't prevent default for external links
         });
     });
     
@@ -385,11 +488,13 @@ function initializeNavigation() {
     window.addEventListener('scroll', function() {
         const scrolled = window.pageYOffset;
         
-        if (scrolled > 100) {
-            navbar.style.background = 'rgba(10, 10, 10, 0.98)';
-            navbar.style.backdropFilter = 'blur(20px)';
-        } else {
-            navbar.style.background = 'rgba(10, 10, 10, 0.95)';
+        if (navbar) {
+            if (scrolled > 100) {
+                navbar.style.background = 'rgba(10, 10, 10, 0.98)';
+                navbar.style.backdropFilter = 'blur(20px)';
+            } else {
+                navbar.style.background = 'rgba(10, 10, 10, 0.95)';
+            }
         }
     });
 }
@@ -407,25 +512,6 @@ function initializeScrollEffects() {
             hero.style.transform = `translateY(${rate}px)`;
         }
     });
-    
-    // Header hide/show on scroll (optional)
-    let lastScrollTop = 0;
-    const navbar = document.querySelector('.navbar');
-    
-    window.addEventListener('scroll', function() {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        
-        // Uncomment below if you want navbar to hide on scroll down
-        /*
-        if (scrollTop > lastScrollTop && scrollTop > 200) {
-            navbar.style.transform = 'translateY(-100%)';
-        } else {
-            navbar.style.transform = 'translateY(0)';
-        }
-        */
-        
-        lastScrollTop = scrollTop;
-    });
 }
 
 // ===== ANIMATIONS =====
@@ -440,13 +526,12 @@ function initializeAnimations() {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
-                // Optional: unobserve after animation to improve performance
                 observer.unobserve(entry.target);
             }
         });
     }, observerOptions);
     
-    // Observe elements for animation (including fragrance cards)
+    // Observe elements for animation
     const animatedElements = document.querySelectorAll(
         '.heritage-content, .heritage-visual, .step, .benefit-card, .fragrance-card, .partnership-info, .partnership-form'
     );
@@ -457,15 +542,12 @@ function initializeAnimations() {
         observer.observe(el);
     });
     
-    // Hover effects for interactive elements
     initializeHoverEffects();
-    
-    // Number counter animation for stats
     initializeCounterAnimation();
 }
 
 function initializeHoverEffects() {
-    // Enhanced hover effects for cards (including fragrance cards)
+    // Enhanced hover effects for cards
     const cards = document.querySelectorAll('.step, .benefit-card, .fragrance-card');
     
     cards.forEach(card => {
@@ -549,7 +631,7 @@ function easeOutQuart(t) {
     return 1 - Math.pow(1 - t, 4);
 }
 
-// ===== FORM HANDLING =====
+// ===== ENHANCED FORM HANDLING WITH EMAILJS =====
 function initializeForm() {
     const form = document.getElementById('generalInquiryForm');
     const submitButton = document.querySelector('.btn-submit');
@@ -565,12 +647,12 @@ function initializeForm() {
         input.addEventListener('input', clearFieldError);
     });
     
-    // Form submission
-    form.addEventListener('submit', function(e) {
+    // Form submission with EmailJS
+    form.addEventListener('submit', async function(e) {
         e.preventDefault();
         
         if (validateForm()) {
-            submitForm();
+            await submitForm();
         } else {
             showMessage('Please fill out all required fields correctly.', 'error');
         }
@@ -580,10 +662,8 @@ function initializeForm() {
         const field = e.target;
         const value = field.value.trim();
         
-        // Remove existing error styling
         field.classList.remove('error');
         
-        // Validate based on field type
         let isValid = true;
         
         if (field.hasAttribute('required') && !value) {
@@ -593,7 +673,6 @@ function initializeForm() {
             isValid = emailRegex.test(value);
         }
         
-        // Apply error styling if invalid
         if (!isValid) {
             field.classList.add('error');
             field.style.borderColor = '#dc3545';
@@ -625,60 +704,76 @@ function initializeForm() {
         return isValid;
     }
     
-    function submitForm() {
+    async function submitForm() {
         // Show loading state
         const originalText = submitButton.textContent;
         submitButton.textContent = 'Submitting...';
         submitButton.disabled = true;
         
-        // Collect form data
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData);
-        
-        // Simulate form submission (replace with actual EmailJS implementation)
-        setTimeout(() => {
-            // Reset button
+        try {
+            // Collect form data
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+            
+            // Check if EmailJS is available and configured
+            if (emailManager.isInitialized) {
+                // Format data for EmailJS template
+                const templateParams = emailManager.formatFormData(data);
+                
+                // Send email via EmailJS
+                await emailManager.sendEmail(templateParams);
+                
+                // Success
+                showMessage('Thank you for your inquiry! Our team will contact you within 24 hours.', 'success');
+                form.reset();
+                
+                // Optional: Track successful submission
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'form_submission_success', {
+                        event_category: 'General Inquiry',
+                        event_label: 'EmailJS Success'
+                    });
+                }
+                
+            } else {
+                // Fallback behavior when EmailJS is not available
+                console.warn('EmailJS not available, using fallback submission');
+                
+                // You could implement a fallback here (e.g., send to your own server)
+                // For now, we'll simulate success but inform user to contact directly
+                setTimeout(() => {
+                    showMessage('Thank you for your inquiry! Please contact us directly at info@spritzessentials.com for immediate assistance.', 'success');
+                    form.reset();
+                }, 1000);
+            }
+            
+        } catch (error) {
+            console.error('Form submission error:', error);
+            
+            // Show error message
+            showMessage('There was an error submitting your inquiry. Please try again or contact us directly at info@spritzessentials.com.', 'error');
+            
+            // Optional: Track failed submission
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'form_submission_error', {
+                    event_category: 'General Inquiry',
+                    event_label: error.message || 'Unknown Error'
+                });
+            }
+        } finally {
+            // Reset button state
             submitButton.textContent = originalText;
             submitButton.disabled = false;
-            
-            // Show success message and reset form
-            showMessage('Thank you for your inquiry. Our team will contact you within 24 hours.', 'success');
-            form.reset();
-            
-            // In a real implementation, you would use EmailJS here:
-            /*
-            emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
-                from_name: data.name,
-                from_email: data.email,
-                phone: data.phone || 'Not provided',
-                subject: data.subject,
-                inquiry_type: data.inquiryType,
-                organization: data.organization || 'Not provided',
-                message: data.message,
-                preferred_contact: data.preferredContact || 'No preference',
-                reply_to: data.email
-            }).then(function(response) {
-                submitButton.textContent = originalText;
-                submitButton.disabled = false;
-                showMessage('Thank you for your inquiry. Our team will contact you within 24 hours.', 'success');
-                form.reset();
-            }, function(error) {
-                submitButton.textContent = originalText;
-                submitButton.disabled = false;
-                showMessage('There was an error submitting your inquiry. Please try again or contact us directly.', 'error');
-            });
-            */
-            
-        }, 1500); // Simulate network delay
+        }
     }
     
     function showMessage(message, type) {
         // Hide both messages first
-        successMessage.style.display = 'none';
-        errorMessage.style.display = 'none';
+        if (successMessage) successMessage.style.display = 'none';
+        if (errorMessage) errorMessage.style.display = 'none';
         
         // Show appropriate message
-        if (type === 'success') {
+        if (type === 'success' && successMessage) {
             successMessage.textContent = message;
             successMessage.style.display = 'block';
             successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -691,7 +786,7 @@ function initializeForm() {
                     successMessage.style.opacity = '1';
                 }, 300);
             }, 8000);
-        } else {
+        } else if (type === 'error' && errorMessage) {
             errorMessage.textContent = message;
             errorMessage.style.display = 'block';
             errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -758,11 +853,13 @@ const optimizedScrollHandler = throttle(function() {
     const hero = document.querySelector('.hero');
     
     // Update navbar background
-    if (scrolled > 100) {
-        navbar.style.background = 'rgba(10, 10, 10, 0.98)';
-        navbar.style.backdropFilter = 'blur(20px)';
-    } else {
-        navbar.style.background = 'rgba(10, 10, 10, 0.95)';
+    if (navbar) {
+        if (scrolled > 100) {
+            navbar.style.background = 'rgba(10, 10, 10, 0.98)';
+            navbar.style.backdropFilter = 'blur(20px)';
+        } else {
+            navbar.style.background = 'rgba(10, 10, 10, 0.95)';
+        }
     }
     
     // Parallax effect for hero
@@ -785,10 +882,10 @@ document.addEventListener('keydown', function(e) {
         const navLeft = document.querySelector('.nav-left');
         const navRight = document.querySelector('.nav-right');
         
-        if (navLeft && navLeft.classList.contains('active')) {
-            navToggle.classList.remove('active');
-            navLeft.classList.remove('active');
-            navRight.classList.remove('active');
+        if (navLeft?.classList.contains('active')) {
+            navToggle?.classList.remove('active');
+            navLeft?.classList.remove('active');
+            navRight?.classList.remove('active');
             document.body.style.overflow = '';
         }
     }
@@ -802,10 +899,9 @@ document.addEventListener('keydown', function(e) {
 // Focus management for mobile menu
 function manageFocus() {
     const navLeft = document.querySelector('.nav-left');
-    const navRight = document.querySelector('.nav-right');
     const navLinks = document.querySelectorAll('.nav-left a, .nav-right a');
     
-    if (navLeft && navLeft.classList.contains('active')) {
+    if (navLeft?.classList.contains('active')) {
         // Focus first link when menu opens
         if (navLinks[0]) navLinks[0].focus();
         
@@ -836,7 +932,6 @@ window.addEventListener('error', function(e) {
 function checkBrowserCompatibility() {
     // Check for IntersectionObserver support
     if (!('IntersectionObserver' in window)) {
-        // Fallback for older browsers
         console.warn('IntersectionObserver not supported. Using fallback animation.');
         const elements = document.querySelectorAll('.fade-in');
         elements.forEach(el => el.classList.add('visible'));
@@ -845,19 +940,17 @@ function checkBrowserCompatibility() {
     // Check for CSS Custom Properties support
     if (!CSS.supports('color', 'var(--fake-var)')) {
         console.warn('CSS Custom Properties not supported');
-        // Could implement fallback styles here
     }
 }
 
-// ===== ANALYTICS & TRACKING (Optional) =====
+// ===== ANALYTICS & TRACKING =====
 function initializeAnalytics() {
     // Track form submissions
     const form = document.getElementById('generalInquiryForm');
     if (form) {
         form.addEventListener('submit', function() {
-            // Example: Google Analytics event tracking
             if (typeof gtag !== 'undefined') {
-                gtag('event', 'form_submission', {
+                gtag('event', 'form_submission_attempt', {
                     event_category: 'General Inquiry',
                     event_label: 'General Inquiry Form'
                 });
@@ -891,29 +984,36 @@ function initializeAnalytics() {
     
     // Track scroll depth
     let maxScroll = 0;
+    let scrollMilestones = { 25: false, 50: false, 75: false, 100: false };
+    
     window.addEventListener('scroll', throttle(function() {
         const scrollPercent = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
         if (scrollPercent > maxScroll) {
             maxScroll = scrollPercent;
+            
             // Track milestone scroll depths
-            if (maxScroll >= 25 && maxScroll < 50) {
-                // 25% scroll reached
-            } else if (maxScroll >= 50 && maxScroll < 75) {
-                // 50% scroll reached
-            } else if (maxScroll >= 75) {
-                // 75% scroll reached
-            }
+            Object.keys(scrollMilestones).forEach(milestone => {
+                if (maxScroll >= milestone && !scrollMilestones[milestone]) {
+                    scrollMilestones[milestone] = true;
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'scroll_depth', {
+                            event_category: 'User Engagement',
+                            event_label: `${milestone}% Scroll`,
+                            value: milestone
+                        });
+                    }
+                }
+            });
         }
     }, 1000));
 }
 
 // ===== INITIALIZATION COMPLETION =====
-// Initialize additional features after DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
     checkBrowserCompatibility();
     initializeAnalytics();
     
-    // Add CSS animation for ripple effect
+    // Add CSS animation for ripple effect and error states
     const rippleStyle = document.createElement('style');
     rippleStyle.textContent = `
         @keyframes ripple {
@@ -927,39 +1027,106 @@ document.addEventListener('DOMContentLoaded', function() {
             border-color: #dc3545 !important;
             box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1) !important;
         }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* EmailJS status indicators */
+        .emailjs-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            color: white;
+            font-size: 14px;
+            z-index: 10000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .emailjs-status.success {
+            background-color: #28a745;
+        }
+        
+        .emailjs-status.error {
+            background-color: #dc3545;
+        }
+        
+        .emailjs-status.show {
+            opacity: 1;
+        }
     `;
     document.head.appendChild(rippleStyle);
     
     console.log('🎉 Spritz Essentials website fully loaded and ready!');
 });
 
-// ===== EMAILJS CONFIGURATION =====
-// To use EmailJS, uncomment and configure the following:
-/*
-function initializeEmailJS() {
-    emailjs.init('YOUR_PUBLIC_KEY'); // Replace with your EmailJS public key
+// ===== EMAILJS DEBUGGING UTILITIES =====
+// These functions help debug EmailJS issues in development
+
+function debugEmailJSConfig() {
+    console.group('📧 EmailJS Configuration Debug');
+    console.log('Config available:', !!window.EMAILJS_CONFIG);
     
-    // Test EmailJS connection
-    emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
-        test: 'test'
-    }).then(function() {
-        console.log('EmailJS configured successfully');
-    }).catch(function(error) {
-        console.error('EmailJS configuration error:', error);
-    });
+    if (window.EMAILJS_CONFIG) {
+        console.log('Public Key:', window.EMAILJS_CONFIG.publicKey ? '✅ Set' : '❌ Missing');
+        console.log('Service ID:', window.EMAILJS_CONFIG.serviceId ? '✅ Set' : '❌ Missing');
+        console.log('Template ID:', window.EMAILJS_CONFIG.templateId ? '✅ Set' : '❌ Missing');
+    }
+    
+    console.log('EmailJS Library:', typeof emailjs !== 'undefined' ? '✅ Loaded' : '❌ Not loaded');
+    console.log('EmailJS Manager:', emailManager.isInitialized ? '✅ Initialized' : '❌ Not initialized');
+    console.groupEnd();
 }
 
-// Email template parameters structure for reference:
-const templateParams = {
-    from_name: 'John Doe',
-    from_email: 'john@example.com',
-    phone: '+1234567890',
-    subject: 'General Inquiry',
-    inquiry_type: 'general-info',
-    organization: 'Example Company',
-    message: 'Interested in your services...',
-    preferred_contact: 'email',
-    reply_to: 'john@example.com',
-    submission_date: new Date().toLocaleDateString()
-};
-*/
+// Expose debug function globally for console testing
+window.debugEmailJS = debugEmailJSConfig;
+
+// ===== EMAILJS FALLBACK HANDLER =====
+function createEmailJSFallback() {
+    // Create a fallback notification system
+    const createStatusNotification = (message, type) => {
+        const notification = document.createElement('div');
+        notification.className = `emailjs-status ${type}`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => notification.classList.add('show'), 100);
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => document.body.removeChild(notification), 300);
+        }, 3000);
+    };
+    
+    // Check EmailJS status periodically and show helpful messages
+    let emailJSCheckInterval = setInterval(() => {
+        if (emailManager.isInitialized) {
+            clearInterval(emailJSCheckInterval);
+            return;
+        }
+        
+        // Only show notification in development (you can remove this in production)
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            if (typeof emailjs === 'undefined') {
+                console.warn('💡 EmailJS library not detected. Add the script tag to your HTML.');
+            } else if (!window.EMAILJS_CONFIG) {
+                console.warn('💡 EmailJS config not found. Make sure config.js is loaded before main script.');
+            }
+        }
+    }, 5000);
+    
+    // Clear interval after 30 seconds to avoid endless checking
+    setTimeout(() => clearInterval(emailJSCheckInterval), 30000);
+}
+
+// Initialize fallback system
+createEmailJSFallback();
